@@ -1,13 +1,14 @@
 import Muny from "./muny";
 
 it("can give money value", () => {
+  // doesn't pass??? Stupid floating point stupid
   let myMoney = new Muny(4.6);
   expect(myMoney._cents).toEqual(460);
 });
 
 it("can format money value right", () => {
-  let someMoney = new Muny(150.4);
-  expect(someMoney.formatted()).toEqual("$150.40");
+  let someMoney = new Muny(150.04);
+  expect(someMoney.formatted()).toEqual("$150.04");
 });
 
 it("can handle integer values fine", () => {
@@ -17,7 +18,7 @@ it("can handle integer values fine", () => {
 
 it("can be initialized at zero", () => {
   let noMoneyHere = new Muny();
-  expect(noMoneyHere.Amount).toEqual(0);
+  expect(noMoneyHere.amount).toEqual(0);
 });
 
 it("can format zero correctly", () => {

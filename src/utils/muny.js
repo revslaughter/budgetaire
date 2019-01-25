@@ -8,14 +8,16 @@ class Muny {
    * Convert a number and its hundredths to an integer
    * @param {number} num The number to convert
    */
-  makeTotalCents = num => Math.floor(num * 100);
+  makeTotalCents = num => Math.floor(Math.round(num * 100));
 
   /**
+   * # Private Variable
    * Get just the whole dollar amount of the money
    */
   _getDollars = () => Math.floor(this._cents / 100);
 
   /**
+   * # Private Variable
    * Get just the cent value only of the money
    */
   _getCents = () => this._cents % 100;
@@ -23,12 +25,14 @@ class Muny {
   /**
    * Return formatted string value for the money
    * Negative numbers should be in parentheses
+   * @returns {string} Formatted with dollar sign, decimal place, and parentheses
    */
   formatted = () => {
     let centAmount = this._getCents();
     let centFormat;
     let isZero = centAmount === 0;
     let isLessThanTen = centAmount < 10;
+
     if (isZero) {
       centFormat = "00";
     } else if (isLessThanTen) {
@@ -42,15 +46,15 @@ class Muny {
 
   /**
    * Get the numeric amount in dollars and cents
-   * @returns {number} the value of the money
+   * @returns {number} the value of the money as a number
    */
-  get Amount() {
+  get amount() {
     return this._cents / 100;
   }
   /**
    * Set the amount of money
    */
-  set Amount(m) {
+  set amount(m) {
     this._cents = this.makeTotalCents(m);
   }
 
@@ -59,7 +63,7 @@ class Muny {
    * @param {number} amt
    */
   constructor(amt) {
-    amt ? (this.Amount = amt) : (this.Amount = 0);
+    amt ? (this.amount = amt) : (this.amount = 0);
   }
 }
 
