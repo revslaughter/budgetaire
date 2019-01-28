@@ -1,4 +1,4 @@
-import currency from "currency";
+import { Muny } from "../utils";
 import { EventEmitter } from "events";
 
 class Account extends EventEmitter {
@@ -6,7 +6,7 @@ class Account extends EventEmitter {
     super();
     if (initialAmount === undefined || initialAmount === null)
       initialAmount = 0;
-    this._balance = currency(initialAmount);
+    this._balance = new Muny(initialAmount);
   }
 
   credit(amount) {
@@ -25,3 +25,5 @@ class Account extends EventEmitter {
     return this._balance.format();
   }
 }
+
+export default new Account();
