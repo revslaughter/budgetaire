@@ -1,0 +1,1 @@
+import AccountRegister from "./accountRegister";

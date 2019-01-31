@@ -1,19 +1,23 @@
 import dispatcher from "../dispatcher";
 
-export const credit = creditAmount => {
+export const credit = creditTransaction => {
   dispatcher.dispatch({
     name: "CREDIT",
-    amount: creditAmount
+    transaction: creditTransaction
   });
 };
 
-export const debit = debitAmount => {
+export const debit = debitTransaction => {
   dispatcher.dispatch({
     name: "DEBIT",
-    amount: debitAmount
+    transaction: debitTransaction
   });
 };
 
 export const reset = () => {
   dispatcher.dispatch({ name: "RESET" });
+};
+
+export const set = setAmount => {
+  dispatcher.dispatch({ name: "SET", amount: setAmount });
 };

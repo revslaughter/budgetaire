@@ -3,38 +3,52 @@ import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 
 class Account extends EventEmitter {
-  constructor(initialAmount) {
+  constructor(history) {
     super();
-    if (initialAmount === undefined || initialAmount === null)
-      initialAmount = 0;
-    this._balance = new Muny(initialAmount);
+    this._balance = new Muny();
+    if (history && Array.isArray(history)) {
+      this.register = history;
+    } else {
+      this.register = [];
+    }
   }
 
-  credit(amount) {
-    this._balance.add(amount);
+  set(transaction) {
+    this._balance = new Muny(transaction.amount);
+    this.register.push({ ...transaction, type: "SET" });
+  }
+  credit(transaction) {
+    this.register.push({ ...transaction, type: "CREDIT" });
+    this._balance.add(transaction.amount);
     this.emit("credit");
   }
-  debit(amount) {
-    this._balance.subtract(amount);
+  debit(transaction) {
+    this.register.push(transaction);
+    this._balance.subtract(transaction.amount);
     this.emit("debit");
   }
+
   reset() {
-    this._balance = new Muny(0);
+    this._balance = new Muny();
+    this.register = [];
     this.emit("reset");
   }
-  amount() {
-    return this._balance.format();
+  balance() {
+    return this._balance.formatted();
   }
   handleActions(action) {
     switch (action.name) {
       case "CREDIT":
-        this.credit(action.amount);
+        this.credit(action.transaction);
         break;
       case "DEBIT":
-        this.debit(action.amount);
+        this.debit(action.transaction);
         break;
       case "RESET":
         this.reset();
+        break;
+      case "SET":
+        this.set(action.transaction);
         break;
       default:
         break;
