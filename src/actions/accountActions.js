@@ -18,6 +18,6 @@ export const reset = () => {
   dispatcher.dispatch({ name: "RESET" });
 };
 
-export const set = setAmount => {
-  dispatcher.dispatch({ name: "SET", amount: setAmount });
+export const set = setTransaction => {
+  dispatcher.dispatch({ name: "SET", transaction: setTransaction });
 };

@@ -2,20 +2,24 @@ import React from "react";
 
 const Register = props => (
   <div>
-    <p>{props.name}</p>
     <table>
-      <th>
-        <td>Date</td>
-        <td>Type</td>
-        <td>Amt</td>
-      </th>
-      {props.account.register.map((t, i) => (
-        <tr key={`${props.name}${i}${t.date}`}>
-          <td>{t.date}</td>
-          <td className={t.type}>{t.type}</td>
-          <td>{t.amount}</td>
+      <caption>{props.name}</caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Amt</th>
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {props.account.register.map((t, i) => (
+          <tr key={`${props.name}${i}${t.date}`}>
+            <td>{t.date.toLocaleDateString()}</td>
+            <td>{t.type}</td>
+            <td>{t.amount.formatted()}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   </div>
 );
