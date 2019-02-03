@@ -9,6 +9,7 @@ const Register = props => (
           <th>Date</th>
           <th>Type</th>
           <th>Amt</th>
+          <th>Bal</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,7 @@ const Register = props => (
             <td>{t.date.toLocaleDateString()}</td>
             <td>{t.type}</td>
             <td>{t.amount.formatted()}</td>
+            <td>{t.balance}</td>
           </tr>
         ))}
       </tbody>

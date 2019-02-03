@@ -18,26 +18,29 @@ class Account extends EventEmitter {
     this.register.push({
       ...transaction,
       type: "SET",
-      amount: new Muny(transaction.amount)
+      amount: new Muny(transaction.amount),
+      balance: this._balance.formatted()
     });
     this.emit("set");
   }
   credit(transaction) {
+    this._balance.add(transaction.amount);
     this.register.push({
       ...transaction,
       type: "CREDIT",
-      amount: new Muny(transaction.amount)
+      amount: new Muny(transaction.amount),
+      balance: this._balance.formatted()
     });
-    this._balance.add(transaction.amount);
     this.emit("credit");
   }
   debit(transaction) {
+    this._balance.subtract(transaction.amount);
     this.register.push({
       ...transaction,
       type: "DEBIT",
-      amount: new Muny(transaction.amount)
+      amount: new Muny(transaction.amount),
+      balance: this._balance.formatted()
     });
-    this._balance.subtract(transaction.amount);
     this.emit("debit");
   }
 
