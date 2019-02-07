@@ -1,35 +1,38 @@
 import React, { Component } from "react";
-import AccountStore from "../../store/account";
-import { AccountActions } from "../../actions";
+import AppStore from "../../store";
 import AccountRegister from "./accountRegister";
 import AccountActionButton from "./accountActionButton";
-class App extends Component {
-  dateFormatOptions = {
+class AccountEntry extends Component {
+  DATE_FORMAT_OPTIONS = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric"
   };
 
+  TRANSACTION_TYPES = ["debit", "credit", "set", "reset"];
+
   constructor() {
     super();
-    this.state = { balance: AccountStore.balance(), inputVal: 0 };
+    this.state = {
+      account: this.props.account,
+      balance: this.props.account.balance(),
+      inputVal: 0
+    };
   }
 
   componentWillMount() {
     const setAccountState = () => {
       this.setState({
-        balance: AccountStore.balance()
+        account: this.props.account,
+        balance: this.props.account.balance()
       });
     };
-    AccountStore.on("set", setAccountState);
-    AccountStore.on("credit", setAccountState);
-    AccountStore.on("reset", setAccountState);
-    AccountStore.on("debit", setAccountState);
+    AppStore.on("transaction", setAccountState);
   }
 
   componentWillUnmount() {
-    AccountStore.removeAllListeners();
+    AppStore.removeAllListeners();
   }
 
   amountCatcher(changeEvent) {
@@ -39,7 +42,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <p>Balance: {AccountStore.balance()}</p>
+        <p>Balance: {this.state.account.balance()}</p>
         <p>
           <input
             type="number"
@@ -48,30 +51,13 @@ class App extends Component {
           />
         </p>
         <p>
-          <AccountActionButton
-            val={this.state.inputVal}
-            action={AccountActions.credit}
-            label="credit"
-          />
-          <AccountActionButton
-            val={this.state.inputVal}
-            action={AccountActions.debit}
-            label="debit"
-          />
-          <AccountActionButton
-            val={this.state.inputVal}
-            action={AccountActions.set}
-            label="set"
-          />
-          <AccountActionButton
-            val={this.state.inputVal}
-            action={AccountActions.reset}
-            label="reset"
-          />
+          {this.TRANSACTION_TYPES.map(t => (
+            <AccountActionButton val={this.state.inputVal} type={t} />
+          ))}
           <AccountRegister
-            dateFormat={this.dateFormatOptions}
-            account={AccountStore}
-            name="Test Account"
+            dateFormat={this.DATE_FORMAT_OPTIONS}
+            account={this.state.account}
+            name={this.props.name}
           />
         </p>
       </div>
@@ -79,4 +65,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default AccountEntry;

@@ -1,8 +1,6 @@
 import { Muny } from "../utils";
-import { EventEmitter } from "events";
-import dispatcher from "../dispatcher";
 
-class Budget extends EventEmitter {
+class Budget {
   constructor({ name, target }) {
     super();
     this.name = name;
