@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import AppStore from "../../store";
 import AccountRegister from "./accountRegister";
 import AccountActionButton from "./accountActionButton";
 class AccountEntry extends Component {
@@ -15,24 +14,9 @@ class AccountEntry extends Component {
   constructor() {
     super();
     this.state = {
-      account: this.props.account,
       balance: this.props.account.balance(),
       inputVal: 0
     };
-  }
-
-  componentWillMount() {
-    const setAccountState = () => {
-      this.setState({
-        account: this.props.account,
-        balance: this.props.account.balance()
-      });
-    };
-    AppStore.on("transaction", setAccountState);
-  }
-
-  componentWillUnmount() {
-    AppStore.removeAllListeners();
   }
 
   amountCatcher(changeEvent) {
@@ -42,7 +26,7 @@ class AccountEntry extends Component {
   render() {
     return (
       <div className="App">
-        <p>Balance: {this.state.account.balance()}</p>
+        <p>Balance: {this.props.account.balance()}</p>
         <p>
           <input
             type="number"
@@ -52,11 +36,15 @@ class AccountEntry extends Component {
         </p>
         <p>
           {this.TRANSACTION_TYPES.map(t => (
-            <AccountActionButton val={this.state.inputVal} type={t} />
+            <AccountActionButton
+              val={this.state.inputVal}
+              type={t}
+              account={this.props.account}
+            />
           ))}
           <AccountRegister
             dateFormat={this.DATE_FORMAT_OPTIONS}
-            account={this.state.account}
+            account={this.props.account}
             name={this.props.name}
           />
         </p>

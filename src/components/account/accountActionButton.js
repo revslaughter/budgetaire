@@ -1,10 +1,15 @@
 import React from "react";
+import { transact } from "../../actions";
 
 const AccountActionButton = props => {
   return (
     <button
       onClick={e =>
-        props.action({ date: new Date(), type: props.type, amount: props.val })
+        transact(props.account, {
+          date: new Date(),
+          type: props.type,
+          amount: props.val
+        })
       }
     >
       {props.type}

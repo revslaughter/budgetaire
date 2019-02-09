@@ -1,4 +1,4 @@
-import { Muny } from "../utils";
+import { Muny } from ".";
 
 class Budget {
   constructor({ name, target }) {
