@@ -1,11 +1,21 @@
 import React from "react";
+import { transact } from "../../actions";
 
 const AccountActionButton = props => {
   return (
     <button
-      onClick={e => props.action({ date: new Date(), amount: props.val })}
+      onClick={e =>
+        transact({
+          account: props.account,
+          transaction: {
+            date: new Date(),
+            type: props.type,
+            amount: props.val
+          }
+        })
+      }
     >
-      {props.label}
+      {props.children}
     </button>
   );
 };

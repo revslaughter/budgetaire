@@ -5,6 +5,12 @@ it("can give money value", () => {
   expect(myMoney._cents).toEqual(460);
 });
 
+it("can take Muny in constructor", () => {
+  let oldMoney = new Muny(99.99);
+  let newMoney = new Muny(oldMoney);
+  expect(newMoney.amount).toEqual(99.99);
+});
+
 it("can format negative numbers", () => {
   let inTheRed = new Muny(-50);
   expect(inTheRed.formatted()).toEqual("($50.00)");
