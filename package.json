@@ -21,7 +21,9 @@
     "test": "react-scripts test --env=jsdom",
     "electron:start": "electron .",
     "electron:dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "start": "npm-run-all -p react:start:nobrowser electron:dev"
+    "start": "npm-run-all -p react:start:nobrowser electron:dev",
+    "image": "docker-compose -f 'docker-compose.yml' up -d --build",
+    "build:image": "npm-run-all -s build image"
   },
   "eslintConfig": {
     "extends": "react-app"
