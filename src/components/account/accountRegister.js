@@ -16,9 +16,9 @@ const Register = props => (
         {props.account.register.map((t, i) => (
           <tr key={`${props.name}${i}${t.date}`}>
             <td>{t.date.toLocaleDateString()}</td>
-            <td>{t.type}</td>
+            <td>{t.type.toUpperCase()}</td>
             <td>{t.amount.formatted()}</td>
-            <td>{t.balance}</td>
+            <td>{t.balance.formatted()}</td>
           </tr>
         ))}
       </tbody>

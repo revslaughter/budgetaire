@@ -1,11 +1,18 @@
-import * as AccountActions from "./accountActions";
 import dispatcher from "../dispatcher";
 
-export const transact = ({ account, transaction }) => {
+const transact = ({ account, transaction }) => {
   dispatcher.dispatch({
     account,
     transaction,
     name: "TRANSACTION"
   });
 };
-export { AccountActions };
+
+const newAccount = account => {
+  dispatcher.dispatch({
+    account,
+    name: "NEW_ACCOUNT"
+  });
+};
+
+export { transact, newAccount };

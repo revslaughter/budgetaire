@@ -5,14 +5,17 @@ const AccountActionButton = props => {
   return (
     <button
       onClick={e =>
-        transact(props.account, {
-          date: new Date(),
-          type: props.type,
-          amount: props.val
+        transact({
+          account: props.account,
+          transaction: {
+            date: new Date(),
+            type: props.type,
+            amount: props.val
+          }
         })
       }
     >
-      {props.type}
+      {props.children}
     </button>
   );
 };

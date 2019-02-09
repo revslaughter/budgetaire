@@ -12,7 +12,7 @@ class Account {
   constructor({ history, target }) {
     if (history && Array.isArray(history)) {
       this.register = history;
-      this._balance = new Muny(history[history.length - 1].amount);
+      this._balance = this.balanceAccount(history);
     } else {
       this.register = [];
       this._balance = new Muny();
@@ -22,6 +22,33 @@ class Account {
     } else {
       this.budget = new Budget(0);
     }
+  }
+
+  /**
+   * Go through history to get correct balance
+   * @param {{amount: number}} history
+   */
+  balanceAccount(history) {
+    return history.reduce((bal, a) => {
+      if (bal && bal.type) bal = new Muny(bal.amount);
+      switch (a.type.toUpperCase()) {
+        case "CREDIT":
+          bal.add(a.amount);
+          break;
+        case "DEBIT":
+          bal.subtract(a.amount);
+          break;
+        case "RESET":
+          bal = new Muny();
+          break;
+        case "SET":
+          bal = new Muny(a.amount);
+          break;
+        default:
+          break;
+      }
+      return bal;
+    });
   }
 
   /**
@@ -55,7 +82,7 @@ class Account {
     this.register.push({
       ...transaction,
       amount: new Muny(transaction.amount),
-      balance: this._balance.formatted()
+      balance: new Muny(this._balance)
     });
   }
 
@@ -68,7 +95,7 @@ class Account {
     this.register.push({
       ...transaction,
       amount: new Muny(transaction.amount),
-      balance: this._balance.formatted()
+      balance: new Muny(this._balance)
     });
   }
   /**
@@ -80,7 +107,7 @@ class Account {
     this.register.push({
       ...transaction,
       amount: new Muny(transaction.amount),
-      balance: this._balance.formatted()
+      balance: new Muny(this._balance)
     });
   }
   /**

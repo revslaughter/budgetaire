@@ -1,4 +1,3 @@
-import Account from "../utils/account";
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 
@@ -11,18 +10,20 @@ class AppStore extends EventEmitter {
    *
    * @param {{accounts: {type: string, amount: number, balance}[]}} accountHistories
    */
-  handleAppInfo({ accounts }) {
+  handleAppInfo(accounts) {
     if (accounts) {
-      this.accounts = accounts.map(a => new Account(a));
+      this.accounts = accounts;
+    } else {
+      this.accounts = [];
     }
   }
 
   /**
    * Adds a new account to the store
-   * @param {Array} history
+   * @param {Account} account
    */
-  newAccount(history) {
-    this.accounts.push(new Account(history));
+  newAccount(account) {
+    this.accounts.push(account);
     this.emit("accountCreated");
   }
 
@@ -32,7 +33,7 @@ class AppStore extends EventEmitter {
    * @param {{type: string, balance}} transaction
    */
   handleTransaction(account, transaction) {
-    switch (transaction.type) {
+    switch (transaction.type.toLowerCase()) {
       case "reset":
         account.reset();
         break;
@@ -42,7 +43,7 @@ class AppStore extends EventEmitter {
       case "debit":
         account.debit(transaction);
         break;
-      case "SET":
+      case "set":
         account.set(transaction);
         break;
       default:
@@ -54,6 +55,9 @@ class AppStore extends EventEmitter {
     switch (action.name) {
       case "TRANSACTION":
         this.handleTransaction(action.account, action.transaction);
+        break;
+      case "NEW_ACCOUNT":
+        this.newAccount(action.account);
         break;
       default:
         break;

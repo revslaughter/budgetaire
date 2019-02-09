@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AccountRegister from "./accountRegister";
 import AccountActionButton from "./accountActionButton";
+import AppStore from "../../store";
 class AccountEntry extends Component {
   DATE_FORMAT_OPTIONS = {
     weekday: "long",
@@ -11,12 +12,27 @@ class AccountEntry extends Component {
 
   TRANSACTION_TYPES = ["debit", "credit", "set", "reset"];
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
+      account: this.props.account,
       balance: this.props.account.balance(),
       inputVal: 0
     };
+  }
+
+  componentWillMount() {
+    const setAccountState = () => {
+      this.setState({
+        account: this.props.account,
+        balance: this.props.account.balance()
+      });
+    };
+    AppStore.on("transaction", setAccountState);
+  }
+
+  componentWillUnmount() {
+    AppStore.removeAllListeners();
   }
 
   amountCatcher(changeEvent) {
@@ -26,7 +42,7 @@ class AccountEntry extends Component {
   render() {
     return (
       <div className="App">
-        <p>Balance: {this.props.account.balance()}</p>
+        <p>Balance: {this.state.balance}</p>
         <p>
           <input
             type="number"
@@ -34,20 +50,23 @@ class AccountEntry extends Component {
             onChange={event => this.amountCatcher(event)}
           />
         </p>
-        <p>
-          {this.TRANSACTION_TYPES.map(t => (
+        <div>
+          {this.TRANSACTION_TYPES.map(typeName => (
             <AccountActionButton
+              key={typeName}
               val={this.state.inputVal}
-              type={t}
+              type={typeName}
               account={this.props.account}
-            />
+            >
+              {typeName}
+            </AccountActionButton>
           ))}
           <AccountRegister
             dateFormat={this.DATE_FORMAT_OPTIONS}
             account={this.props.account}
             name={this.props.name}
           />
-        </p>
+        </div>
       </div>
     );
   }
