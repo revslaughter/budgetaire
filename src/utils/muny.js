@@ -102,11 +102,15 @@ class Muny {
   }
 
   /**
-   * Set money amount
-   * @param {number} amt
+   * Set money amount, can take number or another Muny object
+   * @param {number | Muny} amt
    */
   constructor(amt) {
-    amt ? (this.amount = amt) : (this.amount = 0);
+    if (amt instanceof Muny) {
+      this._cents = amt._cents;
+    } else {
+      amt ? (this.amount = amt) : (this.amount = 0);
+    }
   }
 }
 

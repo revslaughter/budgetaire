@@ -1,15 +1,15 @@
-import { Muny } from ".";
+import { Muny, Budget } from ".";
 
 /**
  * Account stores a balance and the history of transactions.
  */
 class Account {
   /**
-   * Set the account with the given list of transactions
-   * @param {{amount: number}[]} history
+   * Set the account with the given list of transactions, and a budget target
+   * @param {{history: {amount: number}[], target: number}} accountArg Contains History and Budget Target
+   *
    */
-  constructor(history) {
-    super();
+  constructor({ history, target }) {
     if (history && Array.isArray(history)) {
       this.register = history;
       this._balance = new Muny(history[history.length - 1].amount);
@@ -17,8 +17,35 @@ class Account {
       this.register = [];
       this._balance = new Muny();
     }
+    if (target) {
+      this.budget = new Budget(target);
+    } else {
+      this.budget = new Budget(0);
+    }
   }
 
+  /**
+   * The target for the budget.
+   */
+  set target(amount) {
+    this.budget.target = new Muny(amount);
+  }
+  get target() {
+    return this.budget.target;
+  }
+
+  /**
+   * Get the variance from the budget target for the current balance
+   */
+  get variance() {
+    return this.budget.variance(this._balance);
+  }
+  /**
+   * Get the variance percentage from the budget target for the current balance
+   */
+  get variancePercent() {
+    return this.budget.variancePercent(this._balance);
+  }
   /**
    * Set the balance to the amount of the transaction
    * @param {{amount: number}} transaction

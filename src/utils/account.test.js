@@ -1,41 +1,36 @@
-import { AccountActions } from "../actions";
-import AccountStore from "./account";
+import Account from "./account";
 
 it("can initialize", () => {
-  expect(AccountStore.balance()).toEqual("$0.00");
+  let testAccount = new Account({
+    history: [{ amount: 100 }],
+    amount: 100
+  });
+  expect(testAccount.balance()).toEqual("$100.00");
 });
 
 it("can debit", () => {
-  AccountStore.debit({ amount: 5 });
-  expect(AccountStore.balance()).toEqual("($5.00)");
+  let testAccount = new Account({
+    history: [{ amount: 100 }],
+    amount: 100
+  });
+  testAccount.debit({ amount: 105 });
+  expect(testAccount.balance()).toEqual("($5.00)");
 });
 
 it("can credit", () => {
-  AccountStore.credit({ amount: 10 });
-  expect(AccountStore.balance()).toEqual("$5.00");
+  let testAccount = new Account({
+    history: [{ amount: 100 }],
+    amount: 100
+  });
+  testAccount.credit({ amount: 10 });
+  expect(testAccount.balance()).toEqual("$110.00");
 });
 
 it("can reset", () => {
-  AccountStore.reset();
-  expect(AccountStore.balance()).toEqual("$0.00");
-});
-
-it("can handle CREDIT action", () => {
-  AccountActions.credit({ amount: 20 });
-  expect(AccountStore.balance()).toEqual("$20.00");
-});
-
-it("can handle RESET action", () => {
-  AccountActions.reset();
-  expect(AccountStore.balance()).toEqual("$0.00");
-});
-
-it("can handle DEBIT action", () => {
-  AccountActions.debit({ amount: 20 });
-  expect(AccountStore.balance()).toEqual("($20.00)");
-});
-
-it("can handle SET action", () => {
-  AccountActions.set({ amount: 80.08 });
-  expect(AccountStore.balance()).toEqual("$80.08");
+  let testAccount = new Account({
+    history: [{ amount: 100 }],
+    amount: 100
+  });
+  testAccount.reset();
+  expect(testAccount.balance()).toEqual("$0.00");
 });
