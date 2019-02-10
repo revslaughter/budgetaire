@@ -29,26 +29,32 @@ class Account {
    * @param {{amount: number}} history
    */
   balanceAccount(history) {
-    return history.reduce((bal, a) => {
-      if (bal && bal.type) bal = new Muny(bal.amount);
-      switch (a.type.toUpperCase()) {
-        case "CREDIT":
-          bal.add(a.amount);
-          break;
-        case "DEBIT":
-          bal.subtract(a.amount);
-          break;
-        case "RESET":
-          bal = new Muny();
-          break;
-        case "SET":
-          bal = new Muny(a.amount);
-          break;
-        default:
-          break;
-      }
-      return bal;
-    });
+    if (history.length === 0) {
+      return new Muny();
+    } else if (history.length === 1) {
+      return new Muny(history[0].amount);
+    } else {
+      return history.reduce((bal, a) => {
+        if (bal && bal.type) bal = new Muny(bal.amount);
+        switch (a.type.toUpperCase()) {
+          case "CREDIT":
+            bal.add(a.amount);
+            break;
+          case "DEBIT":
+            bal.subtract(a.amount);
+            break;
+          case "RESET":
+            bal = new Muny();
+            break;
+          case "SET":
+            bal = new Muny(a.amount);
+            break;
+          default:
+            break;
+        }
+        return new Muny(bal);
+      });
+    }
   }
 
   /**
