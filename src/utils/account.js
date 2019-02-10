@@ -9,19 +9,21 @@ class Account {
    * @param {{history: {amount: number}[], target: number}} accountArg Contains History and Budget Target
    *
    */
-  constructor({ history, target }) {
+  constructor(acctArgs) {
+    let history, target;
+    if (acctArgs === undefined) {
+      history = [];
+      target = 0;
+    } else {
+      ({ history = [], target = 0 } = acctArgs);
+    }
+    this.register = history;
     if (history && Array.isArray(history)) {
-      this.register = history;
       this._balance = this.balanceAccount(history);
     } else {
-      this.register = [];
       this._balance = new Muny();
     }
-    if (target) {
-      this.budget = new Budget(target);
-    } else {
-      this.budget = new Budget(0);
-    }
+    this.budget = new Budget(target);
   }
 
   /**

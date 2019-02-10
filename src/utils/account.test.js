@@ -8,6 +8,11 @@ it("can initialize", () => {
   expect(testAccount.balance()).toEqual("$100.00");
 });
 
+it("can initialize empty", () => {
+  let empty = new Account();
+  expect(empty.balance()).toEqual("$0.00");
+});
+
 it("can debit", () => {
   let testAccount = new Account({
     history: [{ amount: 100 }],
