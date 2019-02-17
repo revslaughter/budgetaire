@@ -18,7 +18,7 @@ const Register = props => (
             <td>{t.date.toLocaleDateString()}</td>
             <td>{t.type.toUpperCase()}</td>
             <td>{t.amount.formatted()}</td>
-            <td>{t.balance.formatted()}</td>
+            <td>{t.balance ? t.balance.formatted() : null}</td>
           </tr>
         ))}
       </tbody>

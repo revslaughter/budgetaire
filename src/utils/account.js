@@ -1,4 +1,5 @@
 import { Muny, Budget } from ".";
+import AccountTransaction from "./transaction";
 
 /**
  * Account stores a balance and the history of transactions.
@@ -17,11 +18,15 @@ class Account {
     } else {
       ({ history = [], target = 0 } = acctArgs);
     }
-    this.register = history;
     if (history && Array.isArray(history)) {
       this._balance = this.balanceAccount(history);
     } else {
       this._balance = new Muny();
+    }
+    if (history) {
+      this.register = this.addBalanceEntries(history).map(
+        h => new AccountTransaction(h)
+      );
     }
     this.budget = new Budget(target);
   }
@@ -34,29 +39,51 @@ class Account {
     if (history.length === 0) {
       return new Muny();
     } else if (history.length === 1) {
+      history = this.addBalanceEntries(history);
       return new Muny(history[0].amount);
     } else {
-      return history.reduce((bal, a) => {
-        if (bal && bal.type) bal = new Muny(bal.amount);
-        switch (a.type.toUpperCase()) {
-          case "CREDIT":
-            bal.add(a.amount);
-            break;
-          case "DEBIT":
-            bal.subtract(a.amount);
-            break;
-          case "RESET":
-            bal = new Muny();
-            break;
-          case "SET":
-            bal = new Muny(a.amount);
-            break;
-          default:
-            break;
+      history = this.addBalanceEntries(history);
+      return history.reduce((bal, a, i) => {
+        if (bal && bal.type) {
+          bal = new Muny(bal.amount);
         }
+        bal = this.transactionLogic(a.type, bal, a.amount);
         return new Muny(bal);
       });
     }
+  }
+
+  addBalanceEntries(history) {
+    let cBal = new Muny();
+    let historyWithBalance = [];
+    history.forEach(txn => {
+      cBal = this.transactionLogic(txn.type, cBal, txn.amount);
+      historyWithBalance.push({
+        ...txn,
+        balance: cBal
+      });
+    });
+    return historyWithBalance;
+  }
+
+  transactionLogic(type, start, amount) {
+    switch (type.toUpperCase()) {
+      case "CREDIT":
+        start.add(amount);
+        break;
+      case "DEBIT":
+        start.subtract(amount);
+        break;
+      case "RESET":
+        start = new Muny();
+        break;
+      case "SET":
+        start = new Muny(amount);
+        break;
+      default:
+        break;
+    }
+    return new Muny(start);
   }
 
   /**
