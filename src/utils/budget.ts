@@ -1,9 +1,9 @@
 import { Muny } from ".";
 
 class Budget {
-  name: string;
+  name: string | undefined;
   target: Muny;
-  constructor({ name, target }: { name: string; target: number }) {
+  constructor({ name, target }: { name?: string; target: number }) {
     this.name = name;
     this.target = new Muny(target);
   }
