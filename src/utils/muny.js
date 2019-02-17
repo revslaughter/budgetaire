@@ -103,7 +103,7 @@ class Muny {
 
   /**
    * Set money amount, can take number or another Muny object
-   * @param {number | Muny} amt
+   * @param {number | Muny | undefined} amt
    */
   constructor(amt) {
     if (amt instanceof Muny) {
