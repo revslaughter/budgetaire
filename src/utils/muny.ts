@@ -3,13 +3,15 @@
  * point difficulties.
  */
 class Muny {
+  _cents: number;
+
   /**
    * Convert a number and its hundredths to an integer
    * Rounds with the assumption that floating point errors will be closest
    * to the nearest integer. Maybe not the best assumption.
    * @param {number} num The number to convert
    */
-  makeTotalCents = num => Math.floor(Math.round(num * 100));
+  makeTotalCents = (num: number) => Math.floor(Math.round(num * 100));
 
   /**
    * # Private function
@@ -51,10 +53,10 @@ class Muny {
 
   /**
    * Handles input for arithmetic functions, can handle Muny or number inputs
-   * @param {Muny | number} possibleNumber, the number to do an operation with
+   * @param possibleNumber, the number to do an operation with
    * @returns {number} Returns the integer version of the money
    */
-  _numberDetermine = possibleNumber => {
+  _numberDetermine = (possibleNumber: number | Muny) => {
     if (typeof possibleNumber === "number") {
       return this.makeTotalCents(possibleNumber) / 100;
     } else if (possibleNumber instanceof Muny) {
@@ -68,7 +70,7 @@ class Muny {
    * Adds the input amount to this Muny.
    * @param {Muny | number} otherAmt The amount to add
    */
-  add = otherAmt => {
+  add = (otherAmt: number | Muny) => {
     this.amount += this._numberDetermine(otherAmt);
   };
 
@@ -76,7 +78,7 @@ class Muny {
    * Subtracts an amount from this Muny
    * @param {Muny | number} otherAmt the amount to subtract
    */
-  subtract(otherAmt) {
+  subtract(otherAmt: number | Muny) {
     let amtToSub;
     if (otherAmt instanceof Muny) {
       amtToSub = otherAmt.amount;
@@ -103,13 +105,13 @@ class Muny {
 
   /**
    * Set money amount, can take number or another Muny object
-   * @param {number | Muny | undefined} amt
+   * @param {number | Muny | undefined} amt (optional)
    */
-  constructor(amt) {
+  constructor(amt: number | Muny = 0) {
     if (amt instanceof Muny) {
       this._cents = amt._cents;
     } else {
-      amt ? (this.amount = amt) : (this.amount = 0);
+      this._cents = this.makeTotalCents(amt);
     }
   }
 }
