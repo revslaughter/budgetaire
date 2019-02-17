@@ -1,28 +1,19 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
+import { Account } from "../utils";
+import AccountTransaction from "../utils/transaction";
 
 class AppStore extends EventEmitter {
-  constructor(appInfo) {
+  accounts: Account[];
+  constructor(accounts = new Array<Account>()) {
     super();
-    this.handleAppInfo(appInfo);
-  }
-  /**
-   *
-   * @param {{accounts: {type: string, amount: number, balance}[]}} accountHistories
-   */
-  handleAppInfo(accounts) {
-    if (accounts) {
-      this.accounts = accounts;
-    } else {
-      this.accounts = [];
-    }
+    this.accounts = accounts;
   }
 
   /**
    * Adds a new account to the store
-   * @param {Account} account
    */
-  newAccount(account) {
+  newAccount(account: Account) {
     this.accounts.push(account);
     this.emit("accountCreated");
   }
@@ -32,7 +23,7 @@ class AppStore extends EventEmitter {
    * @param {Account} account
    * @param {{type: string, balance}} transaction
    */
-  handleTransaction(account, transaction) {
+  handleTransaction(account: Account, transaction: AccountTransaction) {
     switch (transaction.type.toLowerCase()) {
       case "reset":
         account.reset();
@@ -51,7 +42,11 @@ class AppStore extends EventEmitter {
     }
     this.emit("transaction");
   }
-  handleActions(action) {
+  handleActions(action: {
+    name: string;
+    account: Account;
+    transaction: AccountTransaction;
+  }) {
     switch (action.name) {
       case "TRANSACTION":
         this.handleTransaction(action.account, action.transaction);
