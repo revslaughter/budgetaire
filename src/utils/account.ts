@@ -28,6 +28,7 @@ class Account {
   ) {
     let history: Array<Transaction>;
     let target: number;
+
     ({ history = [], target = 0 } = acctArgs);
     if (history.length != 0) {
       // got to make sure history is in order of date
@@ -48,7 +49,7 @@ class Account {
       this._balance = new Muny();
       this.register = history;
     }
-    this.name = name;
+    this.name = acctArgs.name;
     this.budget = new Budget({ target });
   }
 
