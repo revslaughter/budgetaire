@@ -30,6 +30,16 @@ class Account {
     let target: number;
     ({ history = [], target = 0 } = acctArgs);
     if (history.length != 0) {
+      // got to make sure history is in order of date
+      history.sort((oneTx: Transaction, anotherTx: Transaction) => {
+        if (oneTx.date < anotherTx.date) {
+          return -1;
+        } else if (oneTx.date > anotherTx.date) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
       this._balance = this.balanceAccount(history);
       this.register = this.addBalanceEntries(history).map(
         h => new Transaction(h)
@@ -77,7 +87,7 @@ class Account {
       cBal = this.transactionLogic(txn.type, cBal, txn.amount);
       historyWithBalance.push({
         ...txn,
-        balance: cBal
+        balance: new Muny(cBal)
       });
     });
     return historyWithBalance;
@@ -169,7 +179,7 @@ class Account {
   /**
    * Return the balance as a formatted string
    */
-  balance() {
+  get balance() {
     return this._balance.formatted();
   }
 }

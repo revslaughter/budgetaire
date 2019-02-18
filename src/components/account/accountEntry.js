@@ -16,7 +16,7 @@ class AccountEntry extends Component {
     super(props);
     this.state = {
       account: this.props.account,
-      balance: this.props.account.balance(),
+      balance: this.props.account.balance,
       inputVal: 0
     };
   }
@@ -25,7 +25,7 @@ class AccountEntry extends Component {
     const setAccountState = () => {
       this.setState({
         account: this.props.account,
-        balance: this.props.account.balance()
+        balance: this.props.account.balance
       });
     };
     AppStore.on("transaction", setAccountState);
