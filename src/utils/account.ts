@@ -1,6 +1,12 @@
 import { Muny, Budget } from ".";
 import Transaction from "./transaction";
 
+interface AccountArg {
+  history: Transaction[];
+  target: number;
+  name: string;
+}
+
 /**
  * Account stores a balance and the history of transactions.
  */
@@ -8,17 +14,20 @@ class Account {
   _balance: Muny;
   register: Transaction[];
   budget: Budget;
+  name: string;
 
   /**
    * Set the account with the given list of transactions, and a budget target
    */
   constructor(
-    acctArgs: { history: Transaction[]; target: number } = {
-      history: [],
-      target: 0
+    acctArgs: AccountArg = {
+      history: new Array<Transaction>(),
+      target: 0,
+      name: "Account"
     }
   ) {
-    let history: Transaction[], target: number;
+    let history: Array<Transaction>;
+    let target: number;
     ({ history = [], target = 0 } = acctArgs);
     if (history.length != 0) {
       this._balance = this.balanceAccount(history);
@@ -29,6 +38,7 @@ class Account {
       this._balance = new Muny();
       this.register = history;
     }
+    this.name = name;
     this.budget = new Budget({ target });
   }
 
