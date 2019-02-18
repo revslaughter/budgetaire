@@ -42,6 +42,13 @@ class AccountEntry extends Component {
   render() {
     return (
       <div className="App">
+        <div>
+          <AccountRegister
+            dateFormat={this.DATE_FORMAT_OPTIONS}
+            account={this.props.account}
+            name={this.props.name}
+          />
+        </div>
         <p>Balance: {this.state.balance}</p>
         <p>
           <input
@@ -61,11 +68,6 @@ class AccountEntry extends Component {
               {typeName}
             </AccountActionButton>
           ))}
-          <AccountRegister
-            dateFormat={this.DATE_FORMAT_OPTIONS}
-            account={this.props.account}
-            name={this.props.name}
-          />
         </div>
       </div>
     );
