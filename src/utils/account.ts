@@ -1,41 +1,63 @@
 import { Muny, Budget } from ".";
-import AccountTransaction from "./transaction";
+import Transaction from "./transaction";
+
+interface AccountArg {
+  history: Transaction[];
+  target: number;
+  name: string;
+}
 
 /**
  * Account stores a balance and the history of transactions.
  */
 class Account {
+  _balance: Muny;
+  register: Transaction[];
+  budget: Budget;
+  name: string;
+
   /**
    * Set the account with the given list of transactions, and a budget target
-   * @param {{history: {amount: number}[], target: number}} accountArg Contains History and Budget Target
-   *
    */
-  constructor(acctArgs) {
-    let history, target;
-    if (acctArgs === undefined) {
-      history = [];
-      target = 0;
-    } else {
-      ({ history = [], target = 0 } = acctArgs);
+  constructor(
+    acctArgs: AccountArg = {
+      history: new Array<Transaction>(),
+      target: 0,
+      name: "Account"
     }
-    if (history && Array.isArray(history)) {
+  ) {
+    let history: Array<Transaction>;
+    let target: number;
+
+    ({ history = [], target = 0 } = acctArgs);
+    if (history.length != 0) {
+      // got to make sure history is in order of date
+      history.sort((oneTx: Transaction, anotherTx: Transaction) => {
+        if (oneTx.date < anotherTx.date) {
+          return -1;
+        } else if (oneTx.date > anotherTx.date) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
       this._balance = this.balanceAccount(history);
+      this.register = this.addBalanceEntries(history).map(
+        h => new Transaction(h)
+      );
     } else {
       this._balance = new Muny();
+      this.register = history;
     }
-    if (history) {
-      this.register = this.addBalanceEntries(history).map(
-        h => new AccountTransaction(h)
-      );
-    }
-    this.budget = new Budget(target);
+    this.name = acctArgs.name;
+    this.budget = new Budget({ target });
   }
 
   /**
    * Go through history to get correct balance
-   * @param {{amount: number}} history
+   * @param history
    */
-  balanceAccount(history) {
+  balanceAccount(history: Transaction[]): Muny {
     if (history.length === 0) {
       return new Muny();
     } else if (history.length === 1) {
@@ -43,30 +65,36 @@ class Account {
       return new Muny(history[0].amount);
     } else {
       history = this.addBalanceEntries(history);
-      return history.reduce((bal, a, i) => {
-        if (bal && bal.type) {
-          bal = new Muny(bal.amount);
-        }
-        bal = this.transactionLogic(a.type, bal, a.amount);
-        return new Muny(bal);
-      });
+      let accumulate = (txnList: Transaction[]) => {
+        let balanceAccumulator = new Muny();
+        txnList.forEach(txn => {
+          balanceAccumulator = this.transactionLogic(
+            txn.type,
+            balanceAccumulator,
+            txn.amount
+          );
+        });
+        return new Muny(balanceAccumulator);
+      };
+      let accumulated = accumulate(history);
+      return accumulated;
     }
   }
 
-  addBalanceEntries(history) {
+  addBalanceEntries(history: Transaction[]) {
     let cBal = new Muny();
-    let historyWithBalance = [];
-    history.forEach(txn => {
+    let historyWithBalance: Transaction[] = new Array<Transaction>();
+    history.forEach((txn: Transaction) => {
       cBal = this.transactionLogic(txn.type, cBal, txn.amount);
       historyWithBalance.push({
         ...txn,
-        balance: cBal
+        balance: new Muny(cBal)
       });
     });
     return historyWithBalance;
   }
 
-  transactionLogic(type, start, amount) {
+  transactionLogic(type: string, start: Muny, amount: Muny | number): Muny {
     switch (type.toUpperCase()) {
       case "CREDIT":
         start.add(amount);
@@ -100,19 +128,18 @@ class Account {
    * Get the variance from the budget target for the current balance
    */
   get variance() {
-    return this.budget.variance(this._balance);
+    return this.budget.variance(this._balance.amount);
   }
   /**
    * Get the variance percentage from the budget target for the current balance
    */
   get variancePercent() {
-    return this.budget.variancePercent(this._balance);
+    return this.budget.variancePercent(this._balance.amount);
   }
   /**
    * Set the balance to the amount of the transaction
-   * @param {{amount: number}} transaction
    */
-  set(transaction) {
+  set(transaction: Transaction) {
     this._balance = new Muny(transaction.amount);
     this.register.push({
       ...transaction,
@@ -123,9 +150,8 @@ class Account {
 
   /**
    * Add to the balance, push transaction to the register
-   * @param {{amount: number}} transaction
    */
-  credit(transaction) {
+  credit(transaction: Transaction) {
     this._balance.add(transaction.amount);
     this.register.push({
       ...transaction,
@@ -135,9 +161,8 @@ class Account {
   }
   /**
    * Subtract from the balance, push transaction to the register
-   * @param {{amount: number}} transaction
    */
-  debit(transaction) {
+  debit(transaction: Transaction) {
     this._balance.subtract(transaction.amount);
     this.register.push({
       ...transaction,
@@ -154,9 +179,8 @@ class Account {
   }
   /**
    * Return the balance as a formatted string
-   * @returns {string}
    */
-  balance() {
+  get balance() {
     return this._balance.formatted();
   }
 }

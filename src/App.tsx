@@ -4,10 +4,19 @@ import AppStore from "./store";
 import { Account } from "./utils";
 import * as Actions from "./actions";
 import GetData from "./data/getData";
+import AccountTransaction from "./utils/transaction";
 
 //register all accounts
-GetData().forEach(account => {
-  Actions.newAccount(new Account(account));
+let theData = GetData();
+
+theData.forEach(accountInfo => {
+  let acctTxns = accountInfo.history.map(t => new AccountTransaction(t));
+  let acct: Account = new Account({
+    history: acctTxns,
+    target: accountInfo.target,
+    name: accountInfo.name
+  });
+  Actions.newAccount(acct);
 });
 
 class App extends Component {

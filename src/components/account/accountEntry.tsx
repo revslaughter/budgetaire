@@ -2,21 +2,27 @@ import React, { Component } from "react";
 import AccountRegister from "./accountRegister";
 import AccountActionButton from "./accountActionButton";
 import AppStore from "../../store";
-class AccountEntry extends Component {
-  DATE_FORMAT_OPTIONS = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  };
+import { Account, Muny } from "../../utils";
 
+interface AccountEntryProps {
+  account: Account;
+  name: string;
+}
+
+interface AccountEntryState {
+  account: Account;
+  balance: string;
+  inputVal: number;
+}
+
+class AccountEntry extends Component<AccountEntryProps, AccountEntryState> {
   TRANSACTION_TYPES = ["debit", "credit", "set", "reset"];
 
-  constructor(props) {
+  constructor(props: AccountEntryProps) {
     super(props);
     this.state = {
       account: this.props.account,
-      balance: this.props.account.balance(),
+      balance: this.props.account.balance,
       inputVal: 0
     };
   }
@@ -25,7 +31,7 @@ class AccountEntry extends Component {
     const setAccountState = () => {
       this.setState({
         account: this.props.account,
-        balance: this.props.account.balance()
+        balance: this.props.account.balance
       });
     };
     AppStore.on("transaction", setAccountState);
@@ -35,13 +41,19 @@ class AccountEntry extends Component {
     AppStore.removeAllListeners();
   }
 
-  amountCatcher(changeEvent) {
+  amountCatcher(changeEvent: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ inputVal: parseFloat(changeEvent.target.value) });
   }
 
   render() {
     return (
       <div className="App">
+        <div>
+          <AccountRegister
+            account={this.props.account}
+            name={this.props.name}
+          />
+        </div>
         <p>Balance: {this.state.balance}</p>
         <p>
           <input
@@ -61,11 +73,6 @@ class AccountEntry extends Component {
               {typeName}
             </AccountActionButton>
           ))}
-          <AccountRegister
-            dateFormat={this.DATE_FORMAT_OPTIONS}
-            account={this.props.account}
-            name={this.props.name}
-          />
         </div>
       </div>
     );

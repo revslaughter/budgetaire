@@ -5,12 +5,12 @@ it("can initialize", () => {
     history: [{ amount: 100, type: "credit" }],
     amount: 100
   });
-  expect(testAccount.balance()).toEqual("$100.00");
+  expect(testAccount.balance).toEqual("$100.00");
 });
 
 it("can initialize empty", () => {
   let empty = new Account();
-  expect(empty.balance()).toEqual("$0.00");
+  expect(empty.balance).toEqual("$0.00");
 });
 
 it("can debit", () => {
@@ -19,7 +19,7 @@ it("can debit", () => {
     amount: 100
   });
   testAccount.debit({ amount: 105 });
-  expect(testAccount.balance()).toEqual("($5.00)");
+  expect(testAccount.balance).toEqual("($5.00)");
 });
 
 it("can credit", () => {
@@ -28,7 +28,7 @@ it("can credit", () => {
     amount: 100
   });
   testAccount.credit({ amount: 10 });
-  expect(testAccount.balance()).toEqual("$110.00");
+  expect(testAccount.balance).toEqual("$110.00");
 });
 
 it("can reset", () => {
@@ -37,5 +37,5 @@ it("can reset", () => {
     amount: 100
   });
   testAccount.reset();
-  expect(testAccount.balance()).toEqual("$0.00");
+  expect(testAccount.balance).toEqual("$0.00");
 });
