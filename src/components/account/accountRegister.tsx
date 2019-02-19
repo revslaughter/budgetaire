@@ -1,6 +1,12 @@
 import React from "react";
+import { Account } from "../../utils";
 
-const Register = props => (
+interface RegisterProps {
+  name: string;
+  account: Account;
+}
+
+const Register = (props: RegisterProps) => (
   <div>
     <table>
       <caption>{props.name}</caption>
