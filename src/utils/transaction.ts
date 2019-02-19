@@ -4,7 +4,7 @@ class AccountTransaction {
   type: string;
   date: Date;
   amount: Muny;
-  balance: Muny;
+  balance?: Muny;
 
   constructor(registerItem: {
     type: string;
