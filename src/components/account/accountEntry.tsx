@@ -2,17 +2,23 @@ import React, { Component } from "react";
 import AccountRegister from "./accountRegister";
 import AccountActionButton from "./accountActionButton";
 import AppStore from "../../store";
-class AccountEntry extends Component {
-  DATE_FORMAT_OPTIONS = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  };
+import { Account, Muny } from "../../utils";
 
+interface AccountEntryProps {
+  account: Account;
+  name: string;
+}
+
+interface AccountEntryState {
+  account: Account;
+  balance: string;
+  inputVal: number;
+}
+
+class AccountEntry extends Component<AccountEntryProps, AccountEntryState> {
   TRANSACTION_TYPES = ["debit", "credit", "set", "reset"];
 
-  constructor(props) {
+  constructor(props: AccountEntryProps) {
     super(props);
     this.state = {
       account: this.props.account,
@@ -35,7 +41,7 @@ class AccountEntry extends Component {
     AppStore.removeAllListeners();
   }
 
-  amountCatcher(changeEvent) {
+  amountCatcher(changeEvent: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ inputVal: parseFloat(changeEvent.target.value) });
   }
 
@@ -44,7 +50,6 @@ class AccountEntry extends Component {
       <div className="App">
         <div>
           <AccountRegister
-            dateFormat={this.DATE_FORMAT_OPTIONS}
             account={this.props.account}
             name={this.props.name}
           />

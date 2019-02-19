@@ -5,8 +5,8 @@ import { Account, Muny } from "../../utils";
 interface AccountActionButtonProps {
   account: Account;
   type: string;
-  val: Muny;
-  children: JSX.Element[];
+  val: number;
+  children: string;
 }
 
 const AccountActionButton = (props: AccountActionButtonProps) => {
@@ -16,7 +16,7 @@ const AccountActionButton = (props: AccountActionButtonProps) => {
       transaction: {
         date: new Date(),
         type: props.type,
-        amount: props.val
+        amount: new Muny(props.val)
       }
     });
   };
