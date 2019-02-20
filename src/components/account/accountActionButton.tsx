@@ -5,7 +5,7 @@ import { Account, Muny } from "../../utils";
 interface AccountActionButtonProps {
   account: Account;
   type: string;
-  val: number;
+  val?: number;
   children: string;
 }
 
