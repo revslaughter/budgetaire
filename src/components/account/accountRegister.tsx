@@ -1,14 +1,16 @@
 import React from "react";
+import { Table } from "reactstrap";
 import { Account } from "../../utils";
 
 interface RegisterProps {
   name: string;
   account: Account;
+  className?: string;
 }
 
 const Register = (props: RegisterProps) => (
-  <div>
-    <table>
+  <div className={props.className}>
+    <Table striped hover>
       <caption>{props.name}</caption>
       <thead>
         <tr>
@@ -28,7 +30,7 @@ const Register = (props: RegisterProps) => (
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   </div>
 );
 

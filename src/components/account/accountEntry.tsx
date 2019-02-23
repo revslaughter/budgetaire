@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AccountRegister from "./accountRegister";
+import { ButtonGroup } from "reactstrap";
+import styled from "styled-components";
 import AccountActionButton from "./accountActionButton";
 import AppStore from "../../store";
 import { Account } from "../../utils";
@@ -7,6 +8,7 @@ import { Account } from "../../utils";
 interface AccountEntryProps {
   account: Account;
   name: string;
+  className?: string;
 }
 
 interface AccountEntryState {
@@ -16,7 +18,12 @@ interface AccountEntryState {
 }
 
 const AccountEntry = (props: AccountEntryProps) => {
-  const TRANSACTION_TYPES = ["debit", "credit", "set", "reset"];
+  const TRANSACTION_TYPES = [
+    { action: "debit", color: "primary" },
+    { action: "credit", color: "success" },
+    { action: "set", color: "warning" },
+    { action: "reset", color: "danger" }
+  ];
 
   const [state, setState] = useState<AccountEntryState>({
     account: props.account,
@@ -37,41 +44,46 @@ const AccountEntry = (props: AccountEntryProps) => {
     };
   });
 
-  const amountCatcher = (changeEvent: React.ChangeEvent<HTMLInputElement>) => {
+  const amountCatcher = (value: string) => {
     setState({
       account: state.account,
       balance: state.balance,
-      inputVal: parseFloat(changeEvent.target.value)
+      inputVal: parseFloat(value)
     });
   };
 
   return (
-    <div className="App">
+    <div className={props.className}>
+      <div>Balance: {state.balance}</div>
       <div>
-        <AccountRegister account={props.account} name={props.name} />
-      </div>
-      <p>Balance: {state.balance}</p>
-      <p>
         <input
           type="number"
           value={state.inputVal}
-          onChange={event => amountCatcher(event)}
+          onChange={event => amountCatcher(event.target.value)}
         />
-      </p>
+      </div>
       <div>
-        {TRANSACTION_TYPES.map(typeName => (
-          <AccountActionButton
-            key={typeName}
-            val={state.inputVal}
-            type={typeName}
-            account={props.account}
-          >
-            {typeName}
-          </AccountActionButton>
-        ))}
+        <ButtonGroup>
+          {TRANSACTION_TYPES.map(txType => (
+            <AccountActionButton
+              key={txType.action}
+              val={state.inputVal}
+              type={txType.action}
+              account={props.account}
+              color={txType.color}
+            >
+              {txType.action}
+            </AccountActionButton>
+          ))}
+        </ButtonGroup>
       </div>
     </div>
   );
 };
 
-export default AccountEntry;
+export default styled(AccountEntry)`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+`;

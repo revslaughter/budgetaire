@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import AccountEntry from "./components/account/accountEntry";
 import AppStore from "./store";
 import { Account } from "./utils";
@@ -19,16 +19,12 @@ theData.forEach(accountInfo => {
   Actions.newAccount(acct);
 });
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        {AppStore.accounts.map(a => {
-          return <AccountEntry account={a} name={a.name} key={a.name} />;
-        })}
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="container">
+    {AppStore.accounts.map(a => {
+      return <AccountEntry account={a} name={a.name} key={a.name} />;
+    })}
+  </div>
+);
 
 export default App;

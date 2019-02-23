@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "reactstrap";
 import { transact } from "../../actions";
 import { Account, Muny } from "../../utils";
 
@@ -7,6 +8,7 @@ interface AccountActionButtonProps {
   type: string;
   val?: number;
   children: string;
+  color: string;
 }
 
 const AccountActionButton = (props: AccountActionButtonProps) => {
@@ -21,7 +23,11 @@ const AccountActionButton = (props: AccountActionButtonProps) => {
     });
   };
 
-  return <button onClick={handleClick}>{props.children}</button>;
+  return (
+    <Button color={props.color} onClick={handleClick}>
+      {props.children}
+    </Button>
+  );
 };
 
 export default AccountActionButton;
