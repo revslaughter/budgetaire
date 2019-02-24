@@ -60,7 +60,4 @@ class AppStore extends EventEmitter {
   }
 }
 
-let theAppStore = new AppStore();
-dispatcher.register(theAppStore.handleActions.bind(theAppStore));
-
-export default theAppStore;
+export default AppStore;

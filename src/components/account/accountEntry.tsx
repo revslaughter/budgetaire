@@ -9,6 +9,7 @@ interface AccountEntryProps {
   account: Account;
   name: string;
   className?: string;
+  store: AppStore;
 }
 
 interface AccountEntryState {
@@ -32,17 +33,14 @@ const AccountEntry = (props: AccountEntryProps) => {
   });
 
   useEffect(() => {
-    AppStore.on("transaction", () =>
+    props.store.on("transaction", () =>
       setState({
         account: props.account,
         balance: props.account.balance,
         inputVal: 0
       })
     );
-    return () => {
-      AppStore.removeAllListeners();
-    };
-  });
+  }, []);
 
   const amountCatcher = (value: string) => {
     setState({

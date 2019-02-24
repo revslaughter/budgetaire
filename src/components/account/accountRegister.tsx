@@ -9,6 +9,7 @@ interface RegisterProps {
   account: Account;
   className?: string;
   ascending?: boolean;
+  store: AppStore;
 }
 interface RegisterState {
   account: Account;
@@ -18,17 +19,14 @@ const Register = (props: RegisterProps) => {
   const [state, setState] = useState<RegisterState>({
     account: props.account
   });
-  
+
   useEffect(() => {
-    AppStore.on("transaction", () =>
+    props.store.on("transaction", () =>
       setState({
         account: props.account
       })
     );
-    return () => {
-      AppStore.removeAllListeners();
-    };
-  });
+  }, []);
 
   return (
     <div className={props.className}>

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "reactstrap";
-import { Budget } from "../../utils";
+import { Budget, Account } from "../../utils";
 import AppStore from "../../store";
 import styled from "styled-components";
 import CardHeader from "reactstrap/lib/CardHeader";
 
 interface VarDisplayProps {
   className?: string;
-  budget: Budget;
-  actual: number;
+  account: Account;
   displayDollar?: boolean;
+  store: AppStore;
 }
 
 interface VarDisplayState {
@@ -19,21 +19,18 @@ interface VarDisplayState {
 
 const VarianceDisplay = (props: VarDisplayProps) => {
   const [state, setState] = useState<VarDisplayState>({
-    budget: props.budget,
-    actual: props.actual
+    budget: props.account.budget,
+    actual: props.account._balance.amount
   });
 
   useEffect(() => {
-    AppStore.on("transaction", () =>
+    props.store.on("transaction", () =>
       setState({
-        budget: props.budget,
-        actual: props.actual
+        budget: props.account.budget,
+        actual: props.account._balance.amount
       })
     );
-    return () => {
-      AppStore.removeAllListeners();
-    };
-  });
+  }, []);
 
   let displayPart: string = props.displayDollar
     ? state.budget.variance(state.actual).formatted()

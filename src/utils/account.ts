@@ -15,6 +15,15 @@ class Account {
   register: Transaction[];
   budget: Budget;
   name: string;
+  sorter = (oneTx: Transaction, anotherTx: Transaction) => {
+    if (oneTx.date > anotherTx.date) {
+      return -1;
+    } else if (oneTx.date < anotherTx.date) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
 
   /**
    * Set the account with the given list of transactions, and a budget target
@@ -32,15 +41,7 @@ class Account {
     ({ history = [], target = 0 } = acctArgs);
     if (history.length != 0) {
       // got to make sure history is in order of date
-      history.sort((oneTx: Transaction, anotherTx: Transaction) => {
-        if (oneTx.date > anotherTx.date) {
-          return -1;
-        } else if (oneTx.date < anotherTx.date) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+      history.sort(this.sorter);
       this._balance = this.balanceAccount(history);
       this.register = this.addBalanceEntries(history).map(
         h => new Transaction(h)
@@ -146,6 +147,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
+    this.register.sort(this.sorter);
   }
 
   /**
@@ -158,6 +160,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
+    this.register.sort(this.sorter);
   }
   /**
    * Subtract from the balance, push transaction to the register
@@ -169,6 +172,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
+    this.register.sort(this.sorter);
   }
   /**
    * Reset the history and the balance to zero.
