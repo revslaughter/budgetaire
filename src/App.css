@@ -1,3 +1,7 @@
 .container {
-  width: 200px;
+}
+
+.registerContainer {
+  max-height: 20rem;
+  overflow: scroll;
 }

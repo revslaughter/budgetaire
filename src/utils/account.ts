@@ -33,9 +33,9 @@ class Account {
     if (history.length != 0) {
       // got to make sure history is in order of date
       history.sort((oneTx: Transaction, anotherTx: Transaction) => {
-        if (oneTx.date < anotherTx.date) {
+        if (oneTx.date > anotherTx.date) {
           return -1;
-        } else if (oneTx.date > anotherTx.date) {
+        } else if (oneTx.date < anotherTx.date) {
           return 1;
         } else {
           return 0;

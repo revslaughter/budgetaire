@@ -12,7 +12,7 @@ interface AccountEntryProps {
 }
 
 interface AccountEntryState {
-  account?: Account;
+  account: Account;
   balance?: string;
   inputVal?: number;
 }
@@ -55,14 +55,13 @@ const AccountEntry = (props: AccountEntryProps) => {
   return (
     <div className={props.className}>
       <div>Balance: {state.balance}</div>
+      <div>Budget Target: {state.account.target.formatted()}</div>
       <div>
         <input
           type="number"
           value={state.inputVal}
           onChange={event => amountCatcher(event.target.value)}
         />
-      </div>
-      <div>
         <ButtonGroup>
           {TRANSACTION_TYPES.map(txType => (
             <AccountActionButton
@@ -84,6 +83,6 @@ const AccountEntry = (props: AccountEntryProps) => {
 export default styled(AccountEntry)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
+  grid-gap: 5rem;
+  margin: 1rem;
 `;

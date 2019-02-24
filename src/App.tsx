@@ -1,10 +1,13 @@
 import React from "react";
-import AccountEntry from "./components/account/accountEntry";
+import "./App.css";
 import AppStore from "./store";
 import { Account } from "./utils";
 import * as Actions from "./actions";
 import GetData from "./data/getData";
 import AccountTransaction from "./utils/transaction";
+import AccountEntry from "./components/account/accountEntry";
+import AccountRegister from "./components/account/accountRegister";
+import VarianceDisplay from "./components/budget/varianceDisplay";
 
 //register all accounts
 let theData = GetData();
@@ -22,7 +25,25 @@ theData.forEach(accountInfo => {
 const App = () => (
   <div className="container">
     {AppStore.accounts.map(a => {
-      return <AccountEntry account={a} name={a.name} key={a.name} />;
+      return (
+        <div key={a.name}>
+          <div>
+            <h1>{a.name}</h1>
+          </div>
+          <div>
+            <AccountEntry account={a} name={a.name} />
+            <VarianceDisplay budget={a.budget} actual={a._balance.amount} />
+            <VarianceDisplay
+              budget={a.budget}
+              actual={a._balance.amount}
+              displayDollar
+            />
+            <div className="registerContainer">
+              <AccountRegister account={a} name={a.name} />
+            </div>
+          </div>
+        </div>
+      );
     })}
   </div>
 );
