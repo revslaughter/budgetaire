@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ButtonGroup } from "reactstrap";
-import styled from "styled-components";
 import AccountActionButton from "./accountActionButton";
 import AppStore from "../../store";
 import { Account } from "../../utils";
@@ -52,15 +51,16 @@ const AccountEntry = (props: AccountEntryProps) => {
 
   return (
     <div className={props.className}>
-      <div>Balance: {state.balance}</div>
-      <div>Budget Target: {state.account.target.formatted()}</div>
       <div>
         <input
           type="number"
+          className={props.className}
           value={state.inputVal}
           onChange={event => amountCatcher(event.target.value)}
         />
-        <ButtonGroup>
+      </div>
+      <div>
+        <ButtonGroup className={props.className}>
           {TRANSACTION_TYPES.map(txType => (
             <AccountActionButton
               key={txType.action}
@@ -78,9 +78,4 @@ const AccountEntry = (props: AccountEntryProps) => {
   );
 };
 
-export default styled(AccountEntry)`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 5rem;
-  margin: 1rem;
-`;
+export default AccountEntry;

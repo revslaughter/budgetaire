@@ -23,8 +23,18 @@ const AccountActionButton = (props: AccountActionButtonProps) => {
     });
   };
 
+  const stopPropagation = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+  };
+
   return (
-    <Button color={props.color} onClick={handleClick}>
+    <Button
+      color={props.color}
+      onClick={handleClick}
+      onMouseDown={stopPropagation}
+    >
       {props.children}
     </Button>
   );

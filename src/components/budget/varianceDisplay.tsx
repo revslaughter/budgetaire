@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "reactstrap";
+import styled from "styled-components";
 import { Budget, Account } from "../../utils";
 import AppStore from "../../store";
-import CardHeader from "reactstrap/lib/CardHeader";
 
 interface VarDisplayProps {
   className?: string;
@@ -15,6 +14,17 @@ interface VarDisplayState {
   budget: Budget;
   actual: number;
 }
+
+const IndicatorDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: ${(props: VarDisplayState) =>
+    props.budget.isOverBudget(props.actual) ? "forestgreen" : "firebrick"};
+  background-color: ${(props: any) =>
+    props.budget.isOverBudget(props.actual) ? "lightgreen" : "pink"};
+`;
 
 const VarianceDisplay = (props: VarDisplayProps) => {
   const [state, setState] = useState<VarDisplayState>({
@@ -38,17 +48,12 @@ const VarianceDisplay = (props: VarDisplayProps) => {
         .toLocaleString("en", { style: "percent" });
 
   const isOver = state.budget.isOverBudget(state.actual);
-
-  const overUnderStyle = isOver
-    ? { backgroundColor: "lightgreen", color: "forestgreen" }
-    : { backgroundColor: "pink", color: "firebrick" };
+  const overUnderMsg = isOver ? "Over" : "Under";
 
   return (
-    <div className={props.className}>
-      <Card style={overUnderStyle}>
-        <CardHeader>{displayPart}</CardHeader>
-      </Card>
-    </div>
+    <IndicatorDiv budget={state.budget} actual={state.actual}>
+      {displayPart} {overUnderMsg}
+    </IndicatorDiv>
   );
 };
 
