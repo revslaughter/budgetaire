@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card } from "reactstrap";
 import { Budget, Account } from "../../utils";
 import AppStore from "../../store";
-import styled from "styled-components";
 import CardHeader from "reactstrap/lib/CardHeader";
 
 interface VarDisplayProps {
@@ -40,23 +39,17 @@ const VarianceDisplay = (props: VarDisplayProps) => {
 
   const isOver = state.budget.isOverBudget(state.actual);
 
+  const overUnderStyle = isOver
+    ? { backgroundColor: "lightgreen", color: "forestgreen" }
+    : { backgroundColor: "pink", color: "firebrick" };
+
   return (
     <div className={props.className}>
-      <Card
-        className={isOver ? "overBudget" : "underBudget"}
-        style={{ backgroundColor: isOver ? "lightgreen" : "pink" }}
-      >
+      <Card style={overUnderStyle}>
         <CardHeader>{displayPart}</CardHeader>
       </Card>
     </div>
   );
 };
 
-export default styled(VarianceDisplay)`
-  .overBudget {
-    color: forestgreen;
-  }
-  .underBudget {
-    color: firebrick;
-  }
-`;
+export default VarianceDisplay;
