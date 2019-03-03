@@ -7,7 +7,7 @@ interface TargetDisplayProps {
 }
 
 const TargetDisplay: FunctionComponent<TargetDisplayProps> = props => (
-  <CenteredBox>Budget Target: {props.target.formatted()}</CenteredBox>
+  <CenteredBox>Budget: {props.target.formatted()}</CenteredBox>
 );
 
 export default TargetDisplay;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AppStore from "../../store";
 import { Table } from "reactstrap";
-import { Account } from "../../utils";
+import { Account, AccountTransaction } from "../../utils";
 import styled from "styled-components";
 
 interface RegisterProps {
@@ -13,17 +13,30 @@ interface RegisterProps {
 }
 interface RegisterState {
   account: Account;
+  register: AccountTransaction[];
 }
+
+const sorter = (oneTx: AccountTransaction, anotherTx: AccountTransaction) => {
+  if (oneTx.date > anotherTx.date) {
+    return -1;
+  } else if (oneTx.date < anotherTx.date) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
 
 const Register = (props: RegisterProps) => {
   const [state, setState] = useState<RegisterState>({
-    account: props.account
+    account: props.account,
+    register: props.account.register.slice().sort(sorter)
   });
 
   useEffect(() => {
     props.store.on("transaction", () =>
       setState({
-        account: props.account
+        account: props.account,
+        register: props.account.register.slice().sort(sorter)
       })
     );
   }, []);
@@ -40,7 +53,7 @@ const Register = (props: RegisterProps) => {
           </tr>
         </thead>
         <tbody>
-          {state.account.register.map((t, i) => (
+          {state.register.map((t, i) => (
             <tr key={`${state.account.name}${i}${t.date}`}>
               <td>{t.date.toLocaleDateString()}</td>
               <td>{t.type.toUpperCase()}</td>
@@ -55,6 +68,6 @@ const Register = (props: RegisterProps) => {
 };
 
 export default styled(Register)`
-  background-color: #ffcdf5;
+  background-color: #fddcff;
   border-radius: 0.5rem;
 `;
