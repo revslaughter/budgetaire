@@ -55,6 +55,6 @@ const Register = (props: RegisterProps) => {
 };
 
 export default styled(Register)`
-  background-color: #ffcdf5;
+  background-color: #fddcff;
   border-radius: 0.5rem;
 `;

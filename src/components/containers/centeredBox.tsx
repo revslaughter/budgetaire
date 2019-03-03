@@ -6,6 +6,7 @@ const CenteredBox = styled.div`
   justify-content: center;
   height: 100%;
   border-radius: 0.333rem;
+  font-size: 1.5rem;
 `;
 
 export default CenteredBox;
