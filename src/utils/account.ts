@@ -15,15 +15,31 @@ class Account {
   register: Transaction[];
   budget: Budget;
   name: string;
-  sorter = (oneTx: Transaction, anotherTx: Transaction) => {
-    if (oneTx.date > anotherTx.date) {
+
+  dateLatest = (a: Date, b: Date) => a > b;
+  dateEarliest = (a: Date, b: Date) => a < b;
+
+  sorter = (
+    oneTx: Transaction,
+    anotherTx: Transaction,
+    comp: (a: Date, b: Date) => Boolean
+  ) => {
+    if (comp(oneTx.date, anotherTx.date)) {
       return -1;
-    } else if (oneTx.date < anotherTx.date) {
+    } else if (
+      !comp(oneTx.date, anotherTx.date) &&
+      oneTx.date != anotherTx.date
+    ) {
       return 1;
     } else {
       return 0;
     }
   };
+
+  sortEarliest = (a: Transaction, b: Transaction) =>
+    this.sorter(a, b, this.dateEarliest);
+  sortLatest = (a: Transaction, b: Transaction) =>
+    this.sorter(a, b, this.dateLatest);
 
   /**
    * Set the account with the given list of transactions, and a budget target
@@ -40,8 +56,9 @@ class Account {
 
     ({ history = [], target = 0 } = acctArgs);
     if (history.length != 0) {
-      // got to make sure history is in order of date
-      history.sort(this.sorter);
+      // got to make sure history is in order of date for dateEarliest
+      // so tht the balance is calculated correctly
+      history.sort(this.sortEarliest);
       this._balance = this.balanceAccount(history);
       this.register = this.addBalanceEntries(history).map(
         h => new Transaction(h)
@@ -66,19 +83,7 @@ class Account {
       return new Muny(history[0].amount);
     } else {
       history = this.addBalanceEntries(history);
-      let accumulate = (txnList: Transaction[]) => {
-        let balanceAccumulator = new Muny();
-        txnList.forEach(txn => {
-          balanceAccumulator = this.transactionLogic(
-            txn.type,
-            balanceAccumulator,
-            txn.amount
-          );
-        });
-        return new Muny(balanceAccumulator);
-      };
-      let accumulated = accumulate(history);
-      return accumulated;
+      return history[history.length - 1].balance || new Muny();
     }
   }
 
@@ -147,7 +152,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
-    this.register.sort(this.sorter);
+    this.register.sort(this.sortEarliest);
   }
 
   /**
@@ -160,7 +165,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
-    this.register.sort(this.sorter);
+    this.register.sort(this.sortEarliest);
   }
   /**
    * Subtract from the balance, push transaction to the register
@@ -172,7 +177,7 @@ class Account {
       amount: new Muny(transaction.amount),
       balance: new Muny(this._balance)
     });
-    this.register.sort(this.sorter);
+    this.register.sort(this.sortEarliest);
   }
   /**
    * Reset the history and the balance to zero.
