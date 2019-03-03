@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppStore from "../../store";
 import { Table } from "reactstrap";
 import { Account } from "../../utils";
+import styled from "styled-components";
 
 interface RegisterProps {
   name: string;
@@ -29,7 +30,7 @@ const Register = (props: RegisterProps) => {
 
   return (
     <div className={props.className}>
-      <Table striped hover>
+      <Table responsive striped hover size="sm">
         <thead>
           <tr>
             <th>Date</th>
@@ -53,4 +54,7 @@ const Register = (props: RegisterProps) => {
   );
 };
 
-export default Register;
+export default styled(Register)`
+  background-color: #ffcdf5;
+  border-radius: 0.5rem;
+`;

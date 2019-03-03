@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
+import CenteredBox from "../containers/centeredBox";
 interface balanceDisplayProps {
   balance: string;
 }
 
 const AccountBalance: FunctionComponent<balanceDisplayProps> = props => (
-  <div>Balance: {props.balance}</div>
+  <CenteredBox>Balance: {props.balance}</CenteredBox>
 );
 
 export default AccountBalance;

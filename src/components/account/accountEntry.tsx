@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { ButtonGroup } from "reactstrap";
 import AccountActionButton from "./accountActionButton";
 import AppStore from "../../store";
@@ -16,6 +17,16 @@ interface AccountEntryState {
   balance?: string;
   inputVal?: number;
 }
+
+const TwoRowGridBox = styled.div`
+  display: grid;
+  padding: 0.5rem;
+`;
+
+const DivBlock = styled.div`
+  width: 100%;
+  display: block;
+`;
 
 const AccountEntry = (props: AccountEntryProps) => {
   const TRANSACTION_TYPES = [
@@ -50,16 +61,16 @@ const AccountEntry = (props: AccountEntryProps) => {
   };
 
   return (
-    <div className={props.className}>
-      <div>
+    <TwoRowGridBox className={props.className}>
+      <DivBlock>
         <input
           type="number"
           className={props.className}
           value={state.inputVal}
           onChange={event => amountCatcher(event.target.value)}
         />
-      </div>
-      <div>
+      </DivBlock>
+      <DivBlock>
         <ButtonGroup className={props.className}>
           {TRANSACTION_TYPES.map(txType => (
             <AccountActionButton
@@ -73,8 +84,8 @@ const AccountEntry = (props: AccountEntryProps) => {
             </AccountActionButton>
           ))}
         </ButtonGroup>
-      </div>
-    </div>
+      </DivBlock>
+    </TwoRowGridBox>
   );
 };
 

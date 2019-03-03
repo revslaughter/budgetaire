@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Budget, Account } from "../../utils";
 import AppStore from "../../store";
+import CenteredBox from "../containers/centeredBox";
 
 interface VarDisplayProps {
   className?: string;
@@ -15,11 +16,7 @@ interface VarDisplayState {
   actual: number;
 }
 
-const IndicatorDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+const IndicatorDiv = styled(CenteredBox)`
   color: ${(props: VarDisplayState) =>
     props.budget.isOverBudget(props.actual) ? "forestgreen" : "firebrick"};
   background-color: ${(props: any) =>

@@ -8,7 +8,7 @@ interface ThreeColContainerProps {
 const ThreeColContainer: FunctionComponent<ThreeColContainerProps> = props => (
   <GridLayout
     layout={props.layout}
-    cols={3}
+    cols={7}
     width={900}
     rowHeight={90}
     autoSize

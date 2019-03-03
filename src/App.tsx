@@ -31,16 +31,16 @@ theData.forEach(accountInfo => {
 const App = () => {
   let theAccount = theAppStore.accounts[0];
   let theLayout = [
-    { i: "balance", x: 0, y: 0, w: 1, h: 1 },
-    { i: "target", x: 1, y: 0, w: 1, h: 1 },
-    { i: "entry", x: 2, y: 0, w: 1, h: 1 },
-    { i: "vardispPercent", x: 0, y: 1, w: 1, h: 1 },
-    { i: "vardispDollar", x: 1, y: 1, w: 1, h: 1 },
-    { i: "register", x: 0, y: 2, w: 3, h: 5 }
+    { i: "balance", x: 1, y: 0, w: 2, h: 2 },
+    { i: "entry", x: 3, y: 0, w: 3, h: 1 },
+    { i: "target", x: 3, y: 1, w: 1, h: 1 },
+    { i: "vardispPercent", x: 4, y: 1, w: 1, h: 1 },
+    { i: "vardispDollar", x: 5, y: 1, w: 1, h: 1 },
+    { i: "register", x: 1, y: 2, w: 5, h: 3 }
   ];
   return (
-    <div>
-      <div>
+    <div id="App">
+      <div className="header">
         <h1>{theAccount.name}</h1>
       </div>
       <ThreeColContainer layout={theLayout}>
