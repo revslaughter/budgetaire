@@ -8,7 +8,6 @@ interface VarDisplayProps {
   className?: string;
   account: Account;
   displayDollar?: boolean;
-  store: AppStore;
 }
 
 interface VarDisplayState {
@@ -28,15 +27,6 @@ const VarianceDisplay = (props: VarDisplayProps) => {
     budget: props.account.budget,
     actual: props.account._balance.amount
   });
-
-  useEffect(() => {
-    props.store.on("transaction", () =>
-      setState({
-        budget: props.account.budget,
-        actual: props.account._balance.amount
-      })
-    );
-  }, []);
 
   let displayPart: string = props.displayDollar
     ? state.budget.variance(state.actual).formatted()

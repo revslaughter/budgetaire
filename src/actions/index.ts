@@ -1,22 +1,33 @@
-import dispatcher from "../dispatcher";
-import { Account, AccountTransaction } from "../utils";
+import { Account, Transaction } from "../utils";
 
-const transact = (acctAndTxn: {
-  account: Account;
-  transaction: AccountTransaction;
-}) => {
-  dispatcher.dispatch({
-    account: acctAndTxn.account,
-    transaction: acctAndTxn.transaction,
-    name: "TRANSACTION"
-  });
+interface IAction {
+  type: string;
+  payload: any;
+  error?: boolean;
+}
+
+export const TRANSACTION = "TRANSACTION";
+export const NEW_ACCOUNT = "NEW_ACCOUNT";
+
+export const TRANSACTION_TYPES = {
+  CREDIT: "CREDIT",
+  DEBIT: "DEBIT",
+  SET: "SET",
+  RESET: "RESET"
 };
 
-const newAccount = (account: Account) => {
-  dispatcher.dispatch({
-    account,
-    name: "NEW_ACCOUNT"
-  });
-};
-
-export { transact, newAccount };
+export function addTransaction(
+  account: Account,
+  transaction: Transaction
+): IAction {
+  return { type: TRANSACTION, payload: { account, transaction } };
+}
+export function makeNewAccount(account: Account): IAction {
+  return {
+    type: NEW_ACCOUNT,
+    payload: {
+      account
+    }
+  };
+}
+export default IAction;

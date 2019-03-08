@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AppStore from "../../store";
 import { Table } from "reactstrap";
-import { Account, AccountTransaction } from "../../utils";
+import { Account, Transaction } from "../../utils";
 import styled from "styled-components";
 
 interface RegisterProps {
@@ -9,14 +9,13 @@ interface RegisterProps {
   account: Account;
   className?: string;
   ascending?: boolean;
-  store: AppStore;
 }
 interface RegisterState {
   account: Account;
-  register: AccountTransaction[];
+  register: Transaction[];
 }
 
-const sorter = (oneTx: AccountTransaction, anotherTx: AccountTransaction) => {
+const sorter = (oneTx: Transaction, anotherTx: Transaction) => {
   if (oneTx.date > anotherTx.date) {
     return -1;
   } else if (oneTx.date < anotherTx.date) {
@@ -31,15 +30,6 @@ const Register = (props: RegisterProps) => {
     account: props.account,
     register: props.account.register.slice().sort(sorter)
   });
-
-  useEffect(() => {
-    props.store.on("transaction", () =>
-      setState({
-        account: props.account,
-        register: props.account.register.slice().sort(sorter)
-      })
-    );
-  }, []);
 
   return (
     <div className={props.className}>

@@ -1,6 +1,6 @@
 import Muny from "./muny";
 
-class AccountTransaction {
+class Transaction {
   type: string;
   date: Date;
   amount: Muny;
@@ -27,4 +27,4 @@ class AccountTransaction {
   }
 }
 
-export default AccountTransaction;
+export default Transaction;
