@@ -1,14 +1,21 @@
 import { Layout } from "react-grid-layout";
-import IAction, * as Actions from "../actions";
+import * as Actions from "../actions";
 import { LAYOUT } from "../utils/constants";
 import { Account, Transaction } from "../utils";
 
+export interface AppState {
+  accounts: { id: string; account: Account }[];
+  selectedAccount: Account;
+  userLayout: Layout[];
+}
+
 const initialState: AppState = {
   accounts: [],
+  selectedAccount: new Account(),
   userLayout: LAYOUT
 };
 
-function findAccount(
+export function findAccount(
   accounts: { id: string; account: Account }[],
   acctID: string
 ): Account {
@@ -18,11 +25,6 @@ function findAccount(
   } else {
     return possAcct.account;
   }
-}
-
-export interface AppState {
-  accounts: { id: string; account: Account }[];
-  userLayout: Layout[];
 }
 
 export function TransactionReducer(account: Account, transaction: Transaction) {
@@ -46,26 +48,21 @@ export function TransactionReducer(account: Account, transaction: Transaction) {
 
 export const AppReducer = (
   state: AppState = initialState,
-  action?: IAction
+  action?: Actions.IAction
 ): AppState => {
   if (action === undefined) {
     return state;
   } else {
     switch (action.type) {
       case Actions.TRANSACTION:
-        let currentAccount: Account = findAccount(
-          state.accounts,
-          action.payload.accountID
-        );
-        TransactionReducer(currentAccount, action.payload.transaction);
+        TransactionReducer(state.selectedAccount, action.payload.transaction);
         return state;
-        break;
       case Actions.NEW_ACCOUNT:
         return {
           ...state,
-          accounts: [...state.accounts, action.payload.account]
+          accounts: [...state.accounts, action.payload.account],
+          selectedAccount: action.payload.account
         };
-        break;
       default:
         return state;
     }

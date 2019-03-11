@@ -13,9 +13,29 @@ import "./App.scss";
 import App from "./App";
 import AppStore from "./store";
 
+import * as Actions from "./actions";
+import GetData from "./data/getData";
+import { Account, Transaction } from "./utils";
+import { LAYOUT } from "./utils/constants";
+
+//register all accounts
+let theData = GetData();
+
+const addAccountFromData = (accountInfo: any) => {
+  let acctTxns = accountInfo.history.map((t: any) => new Transaction(t));
+  let acct: Account = new Account({
+    history: acctTxns,
+    target: accountInfo.target,
+    name: accountInfo.name
+  });
+  Actions.makeNewAccount(acct);
+};
+
+addAccountFromData(theData[0]);
+
 ReactDOM.render(
   <Provider store={AppStore}>
-    <App />
+    <App layout={LAYOUT} />
   </Provider>,
   document.getElementById("root")
 );

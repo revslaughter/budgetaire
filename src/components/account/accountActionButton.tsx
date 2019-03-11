@@ -1,6 +1,7 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Button } from "reactstrap";
-import { addTransaction } from "../../actions";
+import { addTransaction, IAction } from "../../actions";
 import { Account, Muny, Transaction } from "../../utils";
 
 interface AccountActionButtonProps {
@@ -9,24 +10,16 @@ interface AccountActionButtonProps {
   val?: number;
   children: string;
   color: string;
+  handleClick: (account: Account, type: string, val?: number) => void;
 }
 
 const AccountActionButton = (props: AccountActionButtonProps) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    addTransaction(
-      props.account,
-      new Transaction({
-        date: new Date(),
-        type: props.type,
-        amount: new Muny(props.val)
-      })
-    );
-  };
-
   return (
     <Button
       color={props.color}
-      onClick={handleClick}
+      onClick={() => {
+        props.handleClick(props.account, props.type, props.val);
+      }}
       onMouseDown={e => e.stopPropagation()}
     >
       {props.children}
@@ -34,4 +27,24 @@ const AccountActionButton = (props: AccountActionButtonProps) => {
   );
 };
 
-export default AccountActionButton;
+const mapDispatchToProps = (dispatch: any) => ({
+  handleClick: (account: Account, type: string, val?: number) => {
+    dispatch(
+      addTransaction(
+        account,
+        new Transaction({
+          date: new Date(),
+          type: type,
+          amount: new Muny(val)
+        })
+      )
+    );
+  }
+});
+
+export default connect(
+  (state, ownProps) => {
+    return {};
+  },
+  mapDispatchToProps
+)(AccountActionButton);

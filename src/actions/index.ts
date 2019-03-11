@@ -1,6 +1,6 @@
 import { Account, Transaction } from "../utils";
 
-interface IAction {
+export interface IAction {
   type: string;
   payload: any;
   error?: boolean;
@@ -22,6 +22,7 @@ export function addTransaction(
 ): IAction {
   return { type: TRANSACTION, payload: { account, transaction } };
 }
+
 export function makeNewAccount(account: Account): IAction {
   return {
     type: NEW_ACCOUNT,
@@ -30,4 +31,3 @@ export function makeNewAccount(account: Account): IAction {
     }
   };
 }
-export default IAction;
