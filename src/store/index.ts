@@ -1,13 +1,18 @@
 import { EventEmitter } from "events";
-import dispatcher from "../dispatcher";
 import { Account } from "../utils";
 import AccountTransaction from "../utils/transaction";
 
 class AppStore extends EventEmitter {
   accounts: Account[];
+  selectedAccount: Account;
   constructor(accounts = new Array<Account>()) {
     super();
     this.accounts = accounts;
+    if (accounts.length === 0) {
+      this.selectedAccount = new Account();
+    } else {
+      this.selectedAccount = accounts[0];
+    }
   }
 
   /**
