@@ -1,5 +1,8 @@
 import { Account, Transaction } from "../utils";
 
+//TODO: Your bug is happening because you're not replacing the
+// modified account in accounts[], though I'm not sure why
+// the thing is resetting the budget target as well?
 function AppStore(accounts = [], selectedAccount = Account()) {
   if (accounts.length === 0) accounts = [selectedAccount];
 

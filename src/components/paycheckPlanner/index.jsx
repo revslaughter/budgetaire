@@ -1,6 +1,6 @@
 import React from "react";
 
-const PaycheckPlanner = (props: any) => {
+const PaycheckPlanner = props => {
   return <strong>Plan your paychecks!</strong>;
 };
 
