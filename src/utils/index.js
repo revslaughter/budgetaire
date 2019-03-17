@@ -1,6 +1,6 @@
 import Muny from "./muny";
 import Account from "./account";
 import Budget from "./budget";
-import AccountTransaction from "./transaction";
+import Transaction from "./transaction";
 
-export { Muny, Account, Budget, AccountTransaction };
+export { Muny, Account, Budget, Transaction };
