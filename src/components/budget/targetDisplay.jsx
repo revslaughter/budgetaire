@@ -3,7 +3,7 @@ import { Muny } from "../../utils";
 import CenteredBox from "../containers/centeredBox";
 
 interface TargetDisplayProps {
-  target: Muny;
+  target: any;
 }
 
 const TargetDisplay: FunctionComponent<TargetDisplayProps> = props => (

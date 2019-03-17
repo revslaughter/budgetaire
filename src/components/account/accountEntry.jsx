@@ -1,34 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import { ButtonGroup } from "reactstrap";
+import { TwoRowGridBox, DivBlock } from "../containers/misc";
 import AccountActionButton from "./accountActionButton";
-import AppStore from "../../store";
 import { Account } from "../../utils";
 
-interface AccountEntryProps {
-  account: Account;
-  name: string;
-  className?: string;
-  store: AppStore;
-}
-
-interface AccountEntryState {
-  account: Account;
-  balance?: string;
-  inputVal?: number;
-}
-
-const TwoRowGridBox = styled.div`
-  display: grid;
-  padding: 0.5rem;
-`;
-
-const DivBlock = styled.div`
-  width: 100%;
-  display: block;
-`;
-
-const AccountEntry = (props: AccountEntryProps) => {
+const AccountEntry = (props = { account: Account() }) => {
   const TRANSACTION_TYPES = [
     { action: "debit", color: "primary" },
     { action: "credit", color: "success" },
@@ -36,26 +12,12 @@ const AccountEntry = (props: AccountEntryProps) => {
     { action: "reset", color: "danger" }
   ];
 
-  const [state, setState] = useState<AccountEntryState>({
-    account: props.account,
-    balance: props.account.balance,
+  const [state, setState] = useState({
     inputVal: 0
   });
 
-  useEffect(() => {
-    props.store.on("transaction", () =>
-      setState({
-        account: props.account,
-        balance: props.account.balance,
-        inputVal: 0
-      })
-    );
-  }, []);
-
-  const amountCatcher = (value: string) => {
+  const amountCatcher = value => {
     setState({
-      account: state.account,
-      balance: state.balance,
       inputVal: parseFloat(value)
     });
   };

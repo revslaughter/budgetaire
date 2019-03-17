@@ -3,16 +3,15 @@ import { Button } from "reactstrap";
 import { transact } from "../../actions";
 import { Account, Muny } from "../../utils";
 
-interface AccountActionButtonProps {
-  account: Account;
-  type: string;
-  val?: number;
-  children: string;
-  color: string;
-}
-
-const AccountActionButton = (props: AccountActionButtonProps) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+const AccountActionButton = (
+  props = {
+    account: Account(),
+    type: "credit",
+    val: 0,
+    color: "primary"
+  }
+) => {
+  const handleClick = e => {
     transact({
       account: props.account,
       transaction: {
@@ -23,9 +22,7 @@ const AccountActionButton = (props: AccountActionButtonProps) => {
     });
   };
 
-  const stopPropagation = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const stopPropagation = e => {
     e.stopPropagation();
   };
 
