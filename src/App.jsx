@@ -54,10 +54,17 @@ const App = () => {
           />
         </div>
         <div key="vardispPercent">
-          <VarianceDisplay account={state.selectedAccount} />
+          <VarianceDisplay
+            budget={state.selectedAccount.budget}
+            actual={state.selectedAccount.balance}
+          />
         </div>
         <div key="vardispDollar">
-          <VarianceDisplay account={state.selectedAccount} displayDollar />
+          <VarianceDisplay
+            budget={state.selectedAccount.budget}
+            actual={state.selectedAccount.balance}
+            displayDollar
+          />
         </div>
         <div key="register">
           <div className="registerContainer">

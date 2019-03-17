@@ -14,7 +14,7 @@ const VarianceDisplay = (
   props = { budget: Budget(), actual: 0, displayDollar: true }
 ) => {
   let displayPart = props.displayDollar
-    ? props.budget.variance(props.actual).formatted()
+    ? props.budget.variance(props.actual).formatted
     : props.budget
         .variancePercent(props.actual)
         .toLocaleString("en", { style: "percent" });

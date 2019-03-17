@@ -18,7 +18,10 @@ function AppStore(accounts = [], selectedAccount = Account()) {
   ) {
     switch (action.name) {
       case "TRANSACTION":
-        return AppStore(accounts, handleTransaction(action.transaction));
+        return AppStore(
+          accounts,
+          handleTransaction(Transaction(action.transaction))
+        );
       case "NEW_ACCOUNT":
         return AppStore([...accounts, action.account], selectedAccount);
       case "SELECTED_ACCOUNT":
