@@ -1,12 +1,7 @@
-import React, { FunctionComponent } from "react";
-import { Muny } from "../../utils";
+import React from "react";
 import CenteredBox from "../containers/centeredBox";
 
-interface TargetDisplayProps {
-  target: any;
-}
-
-const TargetDisplay: FunctionComponent<TargetDisplayProps> = props => (
+const TargetDisplay = props => (
   <CenteredBox>Budget: {props.target.formatted()}</CenteredBox>
 );
 
