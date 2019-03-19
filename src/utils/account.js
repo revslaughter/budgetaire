@@ -3,7 +3,7 @@ import { Muny, Budget, Transaction } from ".";
 /**
  * Account stores a balance and the history of transactions.
  */
-function Account(history = [], target = 0, name = "Account") {
+function Account(history = [], target = 0, name = "Account", id = "unique") {
   const dateLatest = (a, b) => a > b;
   const dateEarliest = (a, b) => a < b;
 
@@ -91,6 +91,7 @@ function Account(history = [], target = 0, name = "Account") {
   budget = Budget({ target });
 
   return {
+    id,
     register,
     balance,
     budget,

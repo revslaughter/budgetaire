@@ -11,14 +11,34 @@ import VarianceDisplay from "./components/budget/varianceDisplay";
 import ColContainer from "./components/containers/colContainer";
 import AccountBalance from "./components/account/accountBalance";
 import TargetDisplay from "./components/budget/targetDisplay";
+import { accountBag } from "./store/accountBag";
 
 //create initial
 let theData = GetData();
-let dataAccounts = theData.map(accountInfo => {
-  let acctTxns = accountInfo.history.map(t => Transaction(t));
-  return Account(acctTxns, accountInfo.target, accountInfo.name);
-});
-let theAppStore = AppStore(dataAccounts, dataAccounts[0]);
+let dataAccounts;
+if (theData.length > 1) {
+  dataAccounts = theData
+    .map((accountInfo, index) => {
+      let acctTxns = accountInfo.history.map(txn => Transaction(txn));
+      return Account(
+        acctTxns,
+        accountInfo.target,
+        accountInfo.name,
+        `${index}`
+      );
+    })
+    .reduce((b, a, ix) => {
+      if (ix === 1) {
+        b = accountBag(b);
+      }
+      return accountBag(a, b);
+    });
+} else {
+  let data = theData[0];
+  let register = data.history.map(txn => Transaction(txn));
+  dataAccounts = accountBag(Account(register, data.target, data.name, "0"));
+}
+let theAppStore = AppStore(dataAccounts, dataAccounts["0"]);
 
 const App = () => {
   const [state, updateState] = useState(theAppStore);
@@ -31,7 +51,7 @@ const App = () => {
   return (
     <div id="App">
       <div className="header">
-        <h1>{state.name}</h1>
+        <h1>{state.selectedAccount.name}</h1>
       </div>
       <ColContainer
         rowHeight={CONSTANTS.ROW_HEIGHT}

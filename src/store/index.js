@@ -1,16 +1,17 @@
 import { Account, Transaction } from "../utils";
+import { accountBag } from "./accountBag";
 
-//TODO: Your bug is happening because you're not replacing the
-// modified account in accounts[], though I'm not sure why
-// the thing is resetting the budget target as well?
-function AppStore(accounts = [], selectedAccount = Account()) {
-  if (accounts.length === 0) accounts = [selectedAccount];
+function AppStore(accounts = {}, selectedAccount = Account()) {
+  if (Object.keys(accounts).length === 0) {
+    accounts = accountBag(selectedAccount);
+  }
 
   function handleTransaction(transaction = Transaction()) {
     return Account(
       [...selectedAccount.register, transaction],
-      selectedAccount.target,
-      selectedAccount.name
+      selectedAccount.budget.target,
+      selectedAccount.name,
+      selectedAccount.id
     );
   }
   function handleAction(
@@ -21,12 +22,10 @@ function AppStore(accounts = [], selectedAccount = Account()) {
   ) {
     switch (action.name) {
       case "TRANSACTION":
-        return AppStore(
-          accounts,
-          handleTransaction(Transaction(action.transaction))
-        );
+        let newAct = handleTransaction(Transaction(action.transaction));
+        return AppStore(accountBag(newAct, accounts), newAct);
       case "NEW_ACCOUNT":
-        return AppStore([...accounts, action.account], selectedAccount);
+        return AppStore(accountBag(action.account, accounts), selectedAccount);
       case "SELECTED_ACCOUNT":
         return AppStore(accounts, action.account);
       default:
